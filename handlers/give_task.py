@@ -1,10 +1,13 @@
+from datetime import datetime, timedelta
+
 from aiogram import Router
 from aiogram.filters import Command
 from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
-from data.DBconnect import TaskDB, add_task
-
+from data.DBconnect import add_task
+from bot import bot
+from potisepents import channel_id
 router = Router()
 
 
@@ -18,6 +21,8 @@ class Task(StatesGroup):
 
 
 record: dict = {}
+delta = timedelta(hours=1)
+time = datetime.now() + delta
 
 
 @router.message(Command("task"))
@@ -73,7 +78,17 @@ async def include_task(message: Message, state: FSMContext):
     telephone_number = message.text
     record['telephone_number'] = telephone_number
     await message.answer("Задание зарегистрированно!!!")
-    record['is_took'] = 0
-    record['time_created'] = '22222'
+    record['time_created'] = time.strftime("%H:%M %d.%m.%Y")
     await add_task(record)
+    await create_and_sent_message()
     await state.clear()
+
+
+async def create_and_sent_message():
+    task_message = f"Задача: {record['task']}\n" \
+                   f"Описание задачи:{record['description']}\n" \
+                   f"Время, когда нужно сделать: {record['lead_time']}\n" \
+                   f"Цена: {record['price']}\n" \
+                   f"Адрес: {record['address']}\n"
+
+    await bot.send_message(channel_id, task_message)

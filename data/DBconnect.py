@@ -21,23 +21,10 @@ class TaskDB(Base):
     telephone_number = Column(Integer)
     master = Column(String)
     time_created = Column(String)
-    is_took = Column(Integer)
 
 
 Session = sessionmaker(autoflush=False, bind=engine)
 
-
-# d = {
-#     'task': "split",
-#     'address': 'zalupovo',
-#     'is_took': 0,
-#     'time_created': "22.03.022",
-# }
-# with Session(autoflush=False, bind=engine) as db:
-#     task = TaskDB(**d)
-#     db.add(task)
-#     db.commit()
-#
 
 async def add_task(task: dict):
     with Session(autoflush=False, bind=engine) as db:
