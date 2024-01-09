@@ -5,7 +5,7 @@ from aiogram.filters import Command
 from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
-from data.DBconnect import add_task
+from data.DBconnect import add_task, get_info
 from bot import bot
 from potisepents import channel_id
 from keyboards import give_task_kb
@@ -81,21 +81,28 @@ async def include_task(message: Message, state: FSMContext):
     record['telephone_number'] = telephone_number
     await message.answer("Задание зарегистрированно!!!")
     record['time_created'] = time.strftime("%H:%M %d.%m.%Y")
-    await add_task(record)
-    await create_and_sent_message(message)
+    id_task = await add_task(record)
+    await create_and_sent_message(message, id_task)
     await state.clear()
 
 
-async def create_and_sent_message(message: Message):
+async def create_and_sent_message(message: Message, id_task):
+    print(id_task)
     task_message = f"Задача: {record['task']}\n" \
                    f"Описание задачи:{record['description']}\n" \
                    f"Время, когда нужно сделать: {record['lead_time']}\n" \
                    f"Цена: {record['price']}\n" \
                    f"Адрес: {record['address']}\n"
 
-    await bot.send_message(channel_id, task_message, reply_markup=give_task_kb.take_task(message.chat.id).as_markup())
+    await bot.send_message(channel_id, task_message, reply_markup=give_task_kb.take_task(id_task).as_markup())
 
 
-@router.callback_query(F.data.startswith("take_"))
+@router.callback_query(F.data.startswith('take_'))
 async def took_task(callback: types.CallbackQuery):
-    print(callback.data[5:])
+    id_task = callback.data[5:]
+    await callback.message.edit_reply_markup()
+    user_id = callback.from_user.id
+    await bot.forward_message(user_id, channel_id, callback.message.message_id)
+    datas = await get_info(id_task)
+    for d in datas:
+        print(d)

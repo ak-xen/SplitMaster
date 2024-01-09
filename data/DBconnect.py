@@ -31,3 +31,10 @@ async def add_task(task: dict):
         record = TaskDB(**task)
         db.add(record)
         db.commit()
+        return record.id
+
+
+async def get_info(id_task):
+    with Session(autoflush=False, bind=engine) as db:
+        datas = db.query(TaskDB).filter(TaskDB.id == id_task).first
+        return datas
