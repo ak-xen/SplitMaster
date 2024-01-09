@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from aiogram import Router
+from aiogram import Router, types, F
 from aiogram.filters import Command
 from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram.fsm.context import FSMContext
@@ -8,6 +8,8 @@ from aiogram.fsm.state import StatesGroup, State
 from data.DBconnect import add_task
 from bot import bot
 from potisepents import channel_id
+from keyboards import give_task_kb
+
 router = Router()
 
 
@@ -80,15 +82,20 @@ async def include_task(message: Message, state: FSMContext):
     await message.answer("Задание зарегистрированно!!!")
     record['time_created'] = time.strftime("%H:%M %d.%m.%Y")
     await add_task(record)
-    await create_and_sent_message()
+    await create_and_sent_message(message)
     await state.clear()
 
 
-async def create_and_sent_message():
+async def create_and_sent_message(message: Message):
     task_message = f"Задача: {record['task']}\n" \
                    f"Описание задачи:{record['description']}\n" \
                    f"Время, когда нужно сделать: {record['lead_time']}\n" \
                    f"Цена: {record['price']}\n" \
                    f"Адрес: {record['address']}\n"
 
-    await bot.send_message(channel_id, task_message)
+    await bot.send_message(channel_id, task_message, reply_markup=give_task_kb.take_task(message.chat.id).as_markup())
+
+
+@router.callback_query(F.data.startswith("take_"))
+async def took_task(callback: types.CallbackQuery):
+    print(callback.data[5:])
