@@ -5,10 +5,10 @@ from aiogram.filters import Command
 from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
-from data.DBconnect import add_task, get_info
+from data.DBconnect import add_task, get_telephone_number
 from bot import bot
 from potisepents import channel_id
-from keyboards import give_task_kb
+from keyboards import give_task_kb, complet_task
 
 router = Router()
 
@@ -79,8 +79,9 @@ async def include_task(message: Message, state: FSMContext):
 async def include_task(message: Message, state: FSMContext):
     telephone_number = message.text
     record['telephone_number'] = telephone_number
-    await message.answer("Задание зарегистрированно!!!")
+    record['status'] = 0
     record['time_created'] = time.strftime("%H:%M %d.%m.%Y")
+    await message.answer("Задание зарегистрированно!!!")
     id_task = await add_task(record)
     await create_and_sent_message(message, id_task)
     await state.clear()
@@ -103,6 +104,6 @@ async def took_task(callback: types.CallbackQuery):
     await callback.message.edit_reply_markup()
     user_id = callback.from_user.id
     await bot.forward_message(user_id, channel_id, callback.message.message_id)
-    datas = await get_info(id_task)
-    for d in datas:
-        print(d)
+    telephone_number = await get_telephone_number(id_task)
+    await bot.send_message(user_id, f'Задание получено!\nНомер заказчика: {telephone_number}',
+                           reply_markup=complet_task.completed_task(id_task, user_id).as_markup())

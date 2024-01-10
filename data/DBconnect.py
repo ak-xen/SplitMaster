@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, DeclarativeBase
 from sqlalchemy import Column, Integer, String
 
-engine = create_engine(f'sqlite:///data/DB.db', echo=True)
+engine = create_engine(f'sqlite:///C:/Users/Munhen/PycharmProjects/SplitMaster/data/DB.db', echo=True)
 
 
 class Base(DeclarativeBase):
@@ -21,6 +21,7 @@ class TaskDB(Base):
     telephone_number = Column(Integer)
     master = Column(String)
     time_created = Column(String)
+    status = Column(Integer)
 
 
 Session = sessionmaker(autoflush=False, bind=engine)
@@ -34,7 +35,14 @@ async def add_task(task: dict):
         return record.id
 
 
-async def get_info(id_task):
+async def get_telephone_number(id_task):
     with Session(autoflush=False, bind=engine) as db:
-        datas = db.query(TaskDB).filter(TaskDB.id == id_task).first
-        return datas
+        datas = db.query(TaskDB).filter(TaskDB.id == id_task).first()
+        return datas.telephone_number
+
+
+async def change_status(id_task):
+    with Session(autoflush=False, bind=engine) as db:
+        datas = db.query(TaskDB).filter(TaskDB.id == id_task).first()
+        datas.status = 1
+        db.commit()
