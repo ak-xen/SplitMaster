@@ -12,4 +12,5 @@ router = Router()
 
 @router.callback_query(F.data.startswith('completed_'))
 async def took_task(callback: types.CallbackQuery):
-    pass
+    data = callback.data.split('_')
+    id_task, user_id = data[1], data[2]

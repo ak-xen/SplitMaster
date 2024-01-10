@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, ForeignKey
 from sqlalchemy.orm import sessionmaker, DeclarativeBase
 from sqlalchemy import Column, Integer, String
 
@@ -19,20 +19,28 @@ class TaskDB(Base):
     address = Column(String)
     price = Column(Integer)
     telephone_number = Column(Integer)
-    master = Column(String)
+    master = Column(Integer)
     time_created = Column(String)
     status = Column(Integer)
+
+
+class MasterDB(Base):
+    __tablename__ = "master"
+
+    id = Column(Integer, ForeignKey('orders.master'), primary_key=True)
+    name = Column(String)
+    family = Column(String)
+    telephone_number = Column(String)
 
 
 Session = sessionmaker(autoflush=False, bind=engine)
 
 
-async def add_task(task: dict):
+async def add_task(task: TaskDB):
     with Session(autoflush=False, bind=engine) as db:
-        record = TaskDB(**task)
-        db.add(record)
+        db.add(task)
         db.commit()
-        return record.id
+        return task.id
 
 
 async def get_telephone_number(id_task):
@@ -41,8 +49,9 @@ async def get_telephone_number(id_task):
         return datas.telephone_number
 
 
-async def change_status(id_task):
+async def add_id_master_in_taskdb(id_task, user_id):
     with Session(autoflush=False, bind=engine) as db:
         datas = db.query(TaskDB).filter(TaskDB.id == id_task).first()
         datas.status = 1
+        datas.master = user_id
         db.commit()
