@@ -14,5 +14,6 @@ async def main():
 
 
 if __name__ == '__main__':
+    import data.DBcreate
     logging.basicConfig(level=logging.INFO)
     asyncio.run(main())

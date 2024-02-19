@@ -1,14 +1,14 @@
 from datetime import datetime, timedelta
 
-from aiogram import Router, types, F
+from aiogram import Router
 from aiogram.filters import Command
 from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
-from data.DBconnect import add_task, get_telephone_number, TaskDB, add_id_master_in_taskdb
+from data.DBconnect import TaskDB
 from bot import bot
 from potisepents import channel_id
-from keyboards import give_task_kb, complet_task
+from keyboards import give_task_kb
 
 router = Router()
 
@@ -76,8 +76,9 @@ async def include_task(message: Message, state: FSMContext):
     new_task.status = 0
     new_task.time_created = time.strftime("%H:%M %d.%m.%Y")
     await message.answer("Задание зарегистрированно!!!")
-    id_task = await add_task(new_task)
-    await bot.send_message(channel_id, await create_message(), reply_markup=give_task_kb.take_task(id_task).as_markup())
+    id_task = await new_task.add_task()
+    await bot.send_message(channel_id, await create_message(),
+                           reply_markup=give_task_kb.take_task(*id_task).as_markup())
     await state.clear()
 
 
@@ -89,15 +90,3 @@ async def create_message():
                    f"Адрес: {new_task.address}\n"
 
     return task_message
-
-
-@router.callback_query(F.data.startswith('take_'))
-async def took_task(callback: types.CallbackQuery):
-    id_task = callback.data[5:]
-    await callback.message.edit_reply_markup()
-    user_id = callback.from_user.id
-    await bot.forward_message(user_id, channel_id, callback.message.message_id)
-    telephone_number = await get_telephone_number(id_task)
-    await add_id_master_in_taskdb(id_task, user_id)
-    await bot.send_message(user_id, f'Задание получено!\nНомер заказчика: {telephone_number}',
-                           reply_markup=complet_task.completed_task(id_task, user_id).as_markup())
