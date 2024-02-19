@@ -1,16 +1,12 @@
-from datetime import datetime, timedelta
-
 from aiogram import Router, types, F
-from aiogram.filters import Command
-from aiogram.types import Message, ReplyKeyboardRemove
+from aiogram.filters.callback_data import CallbackData
 
-from data.DBconnect import add_task, get_telephone_number
-from bot import bot
-
+from keyboards.complet_task import CallbackCompleteTask
 router = Router()
 
 
-@router.callback_query(F.data.startswith('completed_'))
-async def took_task(callback: types.CallbackQuery):
-    data = callback.data.split('_')
-    id_task, user_id = data[1], data[2]
+@router.callback_query(CallbackCompleteTask.filter())
+async def took_task(callback: types.CallbackQuery, callback_data: CallbackCompleteTask):
+    await callback.message.edit_reply_markup()
+
+

@@ -5,7 +5,7 @@ from aiogram.filters import Command
 from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
-from data.DBconnect import TaskDB
+from data.TaskDB import TaskDB
 from bot import bot
 from potisepents import channel_id
 from keyboards import give_task_kb
