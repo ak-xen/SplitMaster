@@ -20,3 +20,6 @@ async def completed(callback: types.CallbackQuery, callback_data: CallbackComple
               f"Номер заказчика: {telephone}\n" \
               f"Когда выполнено: {time_completed}\n"
     await bot.send_message(admin_id, message)
+
+
+

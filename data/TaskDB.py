@@ -59,3 +59,4 @@ class TaskDB:
                 task, address, telephone, time_completed = data[1], data[4], data[6], data[9]
                 return task, address, telephone, time_completed
 
+

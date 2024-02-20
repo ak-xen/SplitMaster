@@ -1,5 +1,4 @@
 from aiogram import Bot
-import security
 from potisepents import admin_id
 from dotenv import dotenv_values
 

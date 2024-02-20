@@ -19,11 +19,11 @@ with conn:
 
     conn.execute("""
         CREATE TABLE IF NOT EXISTS master
-        (id INTEGER PRIMARY KEY,
+        (id INTEGER,
+        status TEXT,
         name TEXT,
         family TEXT,
         telephone_number INTEGER)
         """)
-
 
 conn.close()
