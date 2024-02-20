@@ -4,7 +4,6 @@ from aiogram import Dispatcher
 from handlers import start, give_task, take_task, completed_job
 from bot import bot, on_startup
 
-
 async def main():
     dp = Dispatcher()
     dp.include_router(start.router)
@@ -17,6 +16,5 @@ async def main():
 
 if __name__ == '__main__':
     import data.DBcreate
-
     logging.basicConfig(level=logging.INFO)
     asyncio.run(main())

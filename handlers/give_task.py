@@ -1,5 +1,5 @@
-from datetime import datetime, timedelta
 
+from support import TIME
 from aiogram import Router
 from aiogram.filters import Command
 from aiogram.types import Message
@@ -23,8 +23,7 @@ class Task(StatesGroup):
 
 
 new_task = TaskDB()
-delta = timedelta(hours=1)
-time = datetime.now() + delta
+
 
 
 @router.message(Command("task"))
@@ -74,7 +73,7 @@ async def include_task(message: Message, state: FSMContext):
 async def include_task(message: Message, state: FSMContext):
     new_task.telephone_number = message.text
     new_task.status = 0
-    new_task.time_created = time.strftime("%H:%M %d.%m.%Y")
+    new_task.time_created = TIME.strftime("%H:%M %d.%m.%Y")
     await message.answer("Задание зарегистрированно!!!")
     id_task = await new_task.add_task()
     await bot.send_message(channel_id, await create_message(),

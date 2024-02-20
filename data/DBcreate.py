@@ -13,6 +13,7 @@ with conn:
     telephone_number INTEGER,
     master INTEGER,
     time_created TEXT,
+    time_completed TEXT,
     status INTEGER)
 """),
 

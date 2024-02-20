@@ -1,8 +1,9 @@
 from aiogram import Bot
 import security
 from potisepents import admin_id
+from dotenv import dotenv_values
 
-TOKEN = security.Token
+TOKEN = dotenv_values('.env')["TOKEN"]
 bot = Bot(token=TOKEN)
 
 
