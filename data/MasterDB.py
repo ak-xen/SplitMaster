@@ -7,6 +7,7 @@ class MasterDB:
     id: int
     name: str
     family: str
+    status: str
     telephone_number: int
 
     @staticmethod
@@ -17,6 +18,16 @@ class MasterDB:
                 master_id = master_id[0]
                 return master_id
 
+    async def add_user(self):
+        async with aiosqlite.connect(path_db) as db:
+            await db.execute(
+                f"""INSERT INTO master (id, status, name, family, telephone_number) VALUES ("{self.id}", "{self.status}", "{self.name}", "{self.family}", "{self.telephone_number}")"""
+            )
+            await db.commit()
 
-
-
+    @staticmethod
+    async def get_status(master_id):
+        async with aiosqlite.connect(path_db) as db:
+            async with db.execute("SELECT status FROM master WHERE id = ?", (master_id,)) as cursor:
+                status = await cursor.fetchone()
+                return status[0]

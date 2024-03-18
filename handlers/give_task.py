@@ -1,4 +1,4 @@
-
+from filters.IsAdmin import IsAdmin
 from support import TIME
 from aiogram import Router
 from aiogram.filters import Command
@@ -25,8 +25,7 @@ class Task(StatesGroup):
 new_task = TaskDB()
 
 
-
-@router.message(Command("task"))
+@router.message(IsAdmin(), Command("task"))
 async def create_task(message: Message, state: FSMContext):
     await message.answer(
         "Введите название задачи"
