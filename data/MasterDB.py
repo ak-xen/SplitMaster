@@ -15,8 +15,8 @@ class MasterDB:
         async with aiosqlite.connect(path_db) as db:
             async with db.execute("SELECT id FROM master") as cursor:
                 master_id = await cursor.fetchall()
-                master_id = master_id[0]
-                return master_id if master_id else []
+                master_id = master_id[0] if master_id else []
+                return master_id
 
     async def add_user(self):
         async with aiosqlite.connect(path_db) as db:
