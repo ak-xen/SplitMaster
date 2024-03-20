@@ -12,10 +12,10 @@ td = TaskDB()
 async def info_task(message: Message, command: CommandObject):
     if command.args:
         id = command.args
-        task, address, telephone, time_completed = await td.get_task_info(id)
+        task, address, telephone, master, time_completed = await td.get_task_info(id)
         task_message = f"Задача: {task}\n" \
                        f"Адрес: {address}\n"\
                        f"Номер заказчика: {telephone}\n"
         await message.answer(task_message)
     else:
-        await message.answer('<b>Введите после команды /del_id id!</b>')
+        await message.answer('Введите после команды /inf "номер задачи"!')

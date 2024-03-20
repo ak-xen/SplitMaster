@@ -13,8 +13,10 @@ async def completed(callback: types.CallbackQuery, callback_data: CallbackComple
     id_task = callback_data.id_task
     user_id = callback_data.user_id
     await TaskDB.TaskDB.completed_task(id_task, user_id)
-    task, address, telephone, time_completed = await TaskDB.TaskDB.get_task_info(id_task)
+    task, address, telephone,master, time_completed = await TaskDB.TaskDB.get_task_info(id_task)
+    name, family = await master.get_master_name(user_id)
     message = f"Задание выполнено!!!!!\n" \
+              f"Мастер: {name} {family}\n" \
               f"Задача: {task}\n" \
               f"Адрес: {address}\n" \
               f"Номер заказчика: {telephone}\n" \
