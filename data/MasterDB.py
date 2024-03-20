@@ -31,3 +31,10 @@ class MasterDB:
             async with db.execute("SELECT status FROM master WHERE id = ?", (master_id,)) as cursor:
                 status = await cursor.fetchone()
                 return status[0] if status else []
+
+    @staticmethod
+    async def get_master_name(id):
+        async with aiosqlite.connect(path_db) as db:
+            async with db.execute("SELECT name, family FROM master WHERE id = ?", (id,)) as cursor:
+                name, family = await cursor.fetchone()
+                return name, family
