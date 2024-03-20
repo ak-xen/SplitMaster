@@ -1,6 +1,8 @@
 from typing import Callable, Dict, Any, Awaitable
 from aiogram import BaseMiddleware
 from aiogram.types import Message, TelegramObject, Update
+
+import potisepents
 from data import MasterDB
 
 
@@ -13,5 +15,5 @@ class IsUser(BaseMiddleware):
     ) -> Any:
         user_id = event.event.from_user.id
         all_masters = await MasterDB.MasterDB.all_user()
-        if user_id in all_masters:
+        if user_id in all_masters or user_id == potisepents.admin_id:
             return await handler(event, data)
