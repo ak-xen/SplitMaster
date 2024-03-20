@@ -1,6 +1,6 @@
 import aiosqlite
 
-path_db = "data/Db.db"
+path_db = "data/DB.db"
 
 
 class MasterDB:

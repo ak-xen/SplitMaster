@@ -1,7 +1,7 @@
 import aiosqlite
 from support import TIME
 
-path_db = "data/Db.db"
+path_db = "data/DB.db"
 
 
 class TaskDB:
