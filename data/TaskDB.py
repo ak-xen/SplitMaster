@@ -56,5 +56,5 @@ class TaskDB:
             async with db.execute("SELECT * FROM orders WHERE id = ?", (id_task,)) as cursor:
                 data = await cursor.fetchall()
                 data = data[0]
-                task, address, telephone, master, time_completed = data[1], data[4], data[7], data[6], data[9]
+                task, address, telephone, master, time_completed = data[1], data[4], data[6], data[7], data[9]
                 return task, address, telephone, master, time_completed
