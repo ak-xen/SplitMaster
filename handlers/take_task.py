@@ -25,4 +25,4 @@ async def took_task(callback: types.CallbackQuery):
                            reply_markup=complet_task.completed_task(id_task, user_id).as_markup())
     name, family = await master.get_master_name(user_id)
     await bot.send_message(potisepents.admin, f'Заказ № {id_task} взял:\n'
-                                                 f'Мастер : {name} {family}')
+                                                 f'Мастер: {name} {family}')
