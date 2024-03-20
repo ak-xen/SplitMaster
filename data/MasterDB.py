@@ -30,4 +30,4 @@ class MasterDB:
         async with aiosqlite.connect(path_db) as db:
             async with db.execute("SELECT status FROM master WHERE id = ?", (master_id,)) as cursor:
                 status = await cursor.fetchone()
-                return status[0]
+                return status[0] if status else []
