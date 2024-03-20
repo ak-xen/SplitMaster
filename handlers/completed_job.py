@@ -2,7 +2,7 @@ from aiogram import Router, types
 from data import TaskDB
 from bot import bot
 from keyboards.complet_task import CallbackCompleteTask
-from potisepents import admin_id
+from potisepents import admin
 
 router = Router()
 
@@ -19,7 +19,7 @@ async def completed(callback: types.CallbackQuery, callback_data: CallbackComple
               f"Адрес: {address}\n" \
               f"Номер заказчика: {telephone}\n" \
               f"Когда выполнено: {time_completed}\n"
-    await bot.send_message(admin_id, message)
+    await bot.send_message(admin, message)
 
 
 
