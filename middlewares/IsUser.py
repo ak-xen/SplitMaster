@@ -15,5 +15,6 @@ class IsUser(BaseMiddleware):
     ) -> Any:
         user_id = event.event.from_user.id
         all_masters = await MasterDB.MasterDB.all_user()
+        all_masters = map(lambda x: x[0], all_masters)
         if user_id in all_masters or user_id == int(potisepents.admin_id):
             return await handler(event, data)
