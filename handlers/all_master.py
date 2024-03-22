@@ -12,5 +12,5 @@ async def get_all_master(message: types.Message):
         msg = ''
         for i in all_master:
             name, family = await MasterDB.get_master_name(*i)
-            msg += f'{i[0]}: {name} {family}\n'
+            msg += f'{i[0]} : {name} {family}\n'
         await message.answer(msg)
