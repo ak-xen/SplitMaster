@@ -9,6 +9,7 @@ class TaskDB:
     task: str
     description: str
     lead_time: str
+    district: str
     address: str
     price: str
     telephone_number: str
@@ -19,7 +20,7 @@ class TaskDB:
     async def add_task(self):
         async with aiosqlite.connect(path_db) as db:
             await db.execute(
-                f"""INSERT INTO orders (task, description, lead_time, address, price, telephone_number,time_created, status) VALUES ("{self.task}", "{self.description}", "{self.lead_time}", "{self.address}", "{self.price}", "{self.telephone_number}","{self.time_created}", "{self.status}")"""
+                f"""INSERT INTO orders (task, description, lead_time, district, address, price, telephone_number,time_created, status) VALUES ("{self.task}", "{self.description}", "{self.lead_time}", "{self.district}", "{self.address}", "{self.price}", "{self.telephone_number}","{self.time_created}", "{self.status}")"""
             )
             await db.commit()
             id = await db.execute(
@@ -32,6 +33,12 @@ class TaskDB:
             async with db.execute("SELECT telephone_number FROM orders WHERE id = ?", (id,)) as cursor:
                 tp = await cursor.fetchone()
                 return tp[0]
+
+    async def get_address(self, id):
+        async with aiosqlite.connect(path_db) as db:
+            async with db.execute("SELECT address FROM orders WHERE id = ?", (id,)) as cursor:
+                ad = await cursor.fetchone()
+                return ad[0]
 
     async def add_id_master_in_taskdb(self, id_task, user_id):
         async with aiosqlite.connect(path_db) as db:

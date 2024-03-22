@@ -17,6 +17,7 @@ class Task(StatesGroup):
     task = State()
     description = State()
     lead_time = State()
+    district = State()
     address = State()
     price = State()
     telephone_number = State()
@@ -50,6 +51,13 @@ async def include_task(message: Message, state: FSMContext):
 @router.message(Task.lead_time)
 async def include_task(message: Message, state: FSMContext):
     new_task.lead_time = message.text
+    await message.answer("Введите район на котором нужно выполнить задание!")
+    await state.set_state(Task.district)
+
+
+@router.message(Task.district)
+async def include_task(message: Message, state: FSMContext):
+    new_task.district = message.text
     await message.answer("Введите адресс на котором нужно выполнить задание!")
     await state.set_state(Task.address)
 
@@ -85,6 +93,6 @@ async def create_message():
                    f"Описание задачи:{new_task.description}\n" \
                    f"Время, когда нужно сделать: {new_task.lead_time}\n" \
                    f"Цена: {new_task.price}\n" \
-                   f"Адрес: {new_task.address}\n"
+                   f"Район: {new_task.district}\n"
 
     return task_message

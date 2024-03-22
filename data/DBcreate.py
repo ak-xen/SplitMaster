@@ -8,6 +8,7 @@ with conn:
     task TEXT,
     description TEXT,
     lead_time TEXT,
+    district TEXT, 
     address TEXT,
     price INTEGER,
     telephone_number INTEGER,
