@@ -21,7 +21,7 @@ async def took_task(callback: types.CallbackQuery):
     await bot.forward_message(user_id, channel_id, callback.message.message_id)
     telephone_number = await new_task.get_telephone_number(id_task)
     address = await new_task.get_address(id_task)
-    await new_task.add_id_master_in_taskdb(id_task, user_id)
+    await new_task.set_id_master_in_taskdb(id_task, user_id)
     await bot.send_message(user_id, f'Задание получено!\nНомер заказчика: {telephone_number}\nАдрес заказчика {address}',
                            reply_markup=complet_task.completed_task(id_task, user_id).as_markup())
     name, family = await master.get_master_name(user_id)

@@ -40,7 +40,7 @@ class TaskDB:
                 ad = await cursor.fetchone()
                 return ad[0]
 
-    async def add_id_master_in_taskdb(self, id_task, user_id):
+    async def set_id_master_in_taskdb(self, id_task, user_id):
         async with aiosqlite.connect(path_db) as db:
             await db.execute(f"UPDATE orders SET master='{user_id}' WHERE id='{id_task}'")
             await db.commit()
@@ -65,3 +65,12 @@ class TaskDB:
                 data = data[0]
                 task, address, telephone, master, time_completed = data[1], data[4], data[6], data[7], data[9]
                 return task, address, telephone, master, time_completed
+
+    @staticmethod
+    async def get_info_task_for_message(id_task):
+        async with aiosqlite.connect(path_db) as db:
+            async with db.execute("SELECT * FROM orders WHERE id = ?", (id_task,)) as cursor:
+                data = await cursor.fetchall()
+                data = data[0]
+                task, description, time, price, district = data[1], data[2], data[3], data[6], data[4]
+                return task, description, time, price, district
