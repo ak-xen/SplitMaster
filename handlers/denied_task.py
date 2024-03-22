@@ -7,11 +7,12 @@ from bot import bot
 from data.MasterDB import MasterDB
 from keyboards import give_task_kb
 from keyboards.complet_task import CallbackDeniedTask
-from potisepents import channel_id, admin_id
+from potisepents import channel_id, admin
 
 router = Router()
 ms = MasterDB()
 task = TaskDB.TaskDB()
+
 
 class WhyDenied(StatesGroup):
     why_denied = State()
@@ -32,7 +33,7 @@ async def denied(callback: types.CallbackQuery, callback_data: CallbackDeniedTas
     await bot.send_message(chat_id=channel_id, text=task_message,
                            reply_markup=give_task_kb.take_task(id_task).as_markup())
     name, family = await ms.get_master_name(user_id)
-    await bot.send_message(admin_id, f'Мастер: {name} {family}\nОтказался от задания №{id_task}')
+    await bot.send_message(admin, f'Мастер: {name} {family}\nОтказался от задания №{id_task}')
     await state.set_state(WhyDenied.why_denied)
     await bot.send_message(chat_id=user_id, text='Напишите причину отказа!')
 
@@ -40,5 +41,5 @@ async def denied(callback: types.CallbackQuery, callback_data: CallbackDeniedTas
 @router.message(WhyDenied.why_denied)
 async def include_task(message: Message, state: FSMContext):
     cause = message.text
-    await bot.send_message(admin_id, text=f'По причине: {cause}')
+    await bot.send_message(admin, text=f'По причине: {cause}')
     await state.clear()
