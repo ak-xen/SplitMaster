@@ -8,6 +8,7 @@ from potisepents import admin
 router = Router()
 ms = MasterDB()
 
+
 @router.callback_query(CallbackCompleteTask.filter())
 async def completed(callback: types.CallbackQuery, callback_data: CallbackCompleteTask):
     await callback.message.edit_reply_markup()
@@ -23,6 +24,3 @@ async def completed(callback: types.CallbackQuery, callback_data: CallbackComple
               f"Номер заказчика: {telephone}\n" \
               f"Когда выполнено: {time_completed}\n"
     await bot.send_message(admin, message)
-
-
-

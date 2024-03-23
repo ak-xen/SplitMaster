@@ -1,6 +1,6 @@
 from typing import Callable, Dict, Any, Awaitable
 from aiogram import BaseMiddleware
-from aiogram.types import Message, TelegramObject, Update
+from aiogram.types import  TelegramObject, Update
 
 import potisepents
 from data import MasterDB
